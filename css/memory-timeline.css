@@ -1,0 +1,227 @@
+:root {
+  --bg: #f0f4f8;
+  --card: rgba(255, 255, 255, 0.7);
+  --card-hover: rgba(255, 255, 255, 0.9);
+  --text: #111;
+  --accent: #a39ef9;
+  --border: #ccc;
+  --shadow: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] {
+  --bg: #121212;
+  --card: rgba(51, 51, 51, 0.8);
+  --card-hover: rgba(68, 68, 68, 0.9);
+  --text: #ffffff;
+  --border: #555;
+  --shadow: rgba(255, 255, 255, 0.05);
+}
+
+/* ========== GENERAL ========== */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ========== HEADER ========== */
+.timeline-header {
+  background-color: var(--accent);
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  align-items: center;
+  font-size: 1.4rem;
+  box-shadow: 0 2px 5px var(--shadow);
+}
+
+.back-btn {
+  background: rgb(140, 228, 252);
+  color: var(--accent);
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.back-btn:hover {
+  background: #2f2d2d;
+}
+
+/* ========== FILTERS ========== */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  align-items: center;
+  background-color: #f9f9f9;
+  border-bottom: 1px solid var(--border);
+}
+
+.filters label {
+  font-weight: bold;
+}
+
+.filters input,
+.filters select,
+.filters button {
+  padding: 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.filters button {
+  background-color: var(--accent);
+  color: rgb(52, 84, 227);
+  border: none;
+  cursor: pointer;
+}
+.filters button:hover {
+  background-color: #1c1e1c;
+}
+
+/* ========== TIMELINE ========== */
+.timeline-container {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.timeline-container h2 {
+  margin-bottom: 1rem;
+  font-size: 1.6rem;
+  border-left: 5px solid var(--accent);
+  padding-left: 10px;
+}
+
+/* ========== MEMORY CARD ========== */
+.flip-card {
+  background: transparent;
+  width: 300px;
+  height: 380px;
+  perspective: 1000px;
+  display: inline-block;
+  margin: 1rem;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s ease;
+  transform-style: preserve-3d;
+}
+
+.flip-card:hover .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  overflow: hidden;
+  background: var(--card);
+  box-shadow: 0 5px 15px var(--shadow);
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.flip-card-front {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.flip-card-front h3 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.flip-card-front img,
+.flip-card-front video {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.flip-card-back {
+  transform: rotateY(180deg);
+  text-align: left;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.flip-card-back h4 {
+  margin: 0.5rem 0 0.2rem;
+}
+
+.tag-label {
+  display: inline-block;
+  background-color: var(--accent);
+  color: white;
+  padding: 2px 8px;
+  margin: 2px;
+  font-size: 0.8rem;
+  border-radius: 10px;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .filters {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .timeline-container {
+    padding: 1rem;
+    gap: 1.5rem;
+  }
+
+  .flip-card {
+    width: 90%;
+    height: auto;
+  }
+
+  .flip-card-inner {
+    height: 100%;
+  }
+
+  .flip-card-front,
+  .flip-card-back {
+    height: auto;
+  }
+}
+.logo {
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  gap: 10px;
+  color: #1f1e1e;
+}
+
+.logo-img {
+  height: 60px;
+  width: auto;
+  border:#0c0c0c
+}
+

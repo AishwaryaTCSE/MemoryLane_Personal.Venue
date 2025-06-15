@@ -1,0 +1,48 @@
+<!-- tagging.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>MemoryLane | Tagging</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/tagging.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+  <header class="dashboard-header">
+   <div class="logo">
+   <img src="images/memory.jpg" alt="MemoryLane Logo" class="logo-img" />
+  MemoryLane
+</div>
+    <button class="back-btn" onclick="location.href='dashboard.html'">🔙 Back to Dashboard</button>
+  </header>
+
+  <section class="modal-content">
+    <h2>📌 Add or View Tags</h2>
+    <form id="tagForm">
+      <input type="text" id="memoryId" placeholder="Memory ID" required />
+      <input type="text" id="newTag" placeholder="Enter tag (e.g. vacation)" required />
+      <button type="submit">Add Tag</button>
+      <button type="button" id="fetchMemoryBtn">🔍 Preview Memory</button>
+    </form>
+
+    <div id="memoryPreview" class="memory-preview-box"></div>
+    <ul id="tagList"></ul>
+  </section>
+
+  <section class="tagging-section">
+    <h2>🖼️ Memories by Tag</h2>
+    <div id="photoTagGroupsContainer" class="memory-tag-group"></div>
+    <div id="videoTagGroupsContainer" class="memory-tag-group"></div>
+
+    <div class="pagination-controls">
+      <button id="prevPage">⬅️ Previous</button>
+      <span id="pageNumber">Page 1</span>
+      <button id="nextPage">Next ➡️</button>
+    </div>
+  </section>
+
+  <script type="module" src="js/firebase.js"></script>
+  <script type="module" src="js/tagging.js"></script>
+</body>
+</html>

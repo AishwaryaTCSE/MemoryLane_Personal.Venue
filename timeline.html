@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>MemoryLane | Timeline</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="css/memory-timeline.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+  <header class="timeline-header">
+  <div class="logo">
+   <img src="images/memory.jpg" alt="MemoryLane Logo" class="logo-img" />
+  MemoryLane
+  </div> 
+    <button class="back-btn" onclick="location.href='dashboard.html'">🔙 Back to dashboard</button>
+  </header>
+
+  <section class="filters">
+    <label for="datePicker">📅 Filter by Date:</label>
+    <input type="date" id="datePicker" />
+    <button onclick="filterByCalendarDate()">Filter</button>
+
+    <label for="sortBy">🧩 Group By:</label>
+    <select id="sortBy">
+      <option value="date">📅 Date</option>
+      <option value="tag">🏷️ Tag</option>
+      <option value="place">📍 Place</option>
+    </select>
+    <button onclick="loadAndRender()">🔄 Refresh</button>
+  </section>
+
+  <section id="timelineContainer" class="timeline-container">
+    <p>⏳ Loading memories...</p>
+  </section>
+
+  <script type="module" src="js/firebase.js"></script>
+  <script type="module" src="js/timeline.js"></script>
+</body>
+</html>

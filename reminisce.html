@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Reminisce Memory</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Link to CSS -->
+  <link rel="stylesheet" href="css/reminisce.css" />
+
+  <!-- Link to JS -->
+  <script type="module" src="js/reminisce.js"></script>
+</head>
+<body>
+  <div class="logo">
+   <img src="images/memory.jpg" alt="MemoryLane Logo" class="logo-img" />
+  MemoryLane
+</div>
+  <button class="back-btn" onclick="location.href='dashboard.html'">🔙 Back to Dashboard</button>
+<button id="reminisceBtn" class="dice-btn">🎲</button>
+
+  <div id="memoryCard">
+    <h3 id="memoryTitle">📝 Title</h3>
+    <p id="memoryDate">📅 Date</p>
+    <p id="memoryDescription">📖 Description</p>
+    <p id="memoryLocation">📍 Location</p>
+    <img id="memoryImage" style="display:none;" />
+    <video id="memoryVideo" controls style="display:none;"></video>
+  </div>
+
+</body>
+</html>
