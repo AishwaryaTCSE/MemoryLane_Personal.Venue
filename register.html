@@ -5,27 +5,67 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MemoryLane | Register</title>
   <link rel="stylesheet" href="css/register.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
-  <header class="header">
-    <div class="logo">
-      <img src="images/memory.jpg" alt="MemoryLane Logo" class="logo-img" />
-      MemoryLane
-    </div>
+  <!-- Background Animation -->
+  <div class="background-video" aria-hidden="true"></div>
+
+  <!-- Header -->
+  <header class="header-logo">
+    <img src="images/memory.jpg" alt="MemoryLane Logo" />
+    <span>MemoryLane</span>
   </header>
 
-  <div class="glass-card">
-    <h2>Register for MemoryLane</h2>
-    <form id="registerForm">
-      <input type="email" id="regEmail" placeholder="Email" required />
-      <input type="password" id="regPassword" placeholder="Password" required />
-      <input type="password" id="confirmPassword" placeholder="Confirm Password" required />
-      <button type="submit">Register</button>
-    </form>
-    <div class="switch">
-      Already have an account? <a href="login.html">Login</a>
-    </div>
-  </div>
+  <!-- Main Registration Container -->
+  <main class="register-container">
+    <!-- Branding Side -->
+    <section class="branding-side">
+      <div class="branding-content">
+        <div class="hero-image">
+          <div class="floating-memories">
+            <div class="memory-card card-1"><i class="fas fa-heart"></i><span>Love</span></div>
+            <div class="memory-card card-2"><i class="fas fa-graduation-cap"></i><span>Graduation</span></div>
+            <div class="memory-card card-3"><i class="fas fa-birthday-cake"></i><span>Birthday</span></div>
+            <div class="memory-card card-4"><i class="fas fa-plane"></i><span>Travel</span></div>
+            <div class="memory-card card-5"><i class="fas fa-users"></i><span>Family</span></div>
+          </div>
+        </div>
+        <div class="brand-message">
+          <h2>Join MemoryLane Today</h2>
+          <p>Start preserving your precious moments and create a beautiful timeline of your life's journey.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Registration Form Side -->
+    <section class="register-side">
+      <div class="register-form-container">
+        <header class="form-header">
+          <h2>Create Account</h2>
+          <p>Join thousands of users preserving their memories</p>
+        </header>
+
+        <form id="registerForm" class="register-form" novalidate>
+          <div class="input-group">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="regEmail" name="email" placeholder="Email address" required />
+          </div>
+          <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="regPassword" name="password" placeholder="Password" required />
+          </div>
+          <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="confirmPassword" name="confirm-password" placeholder="Confirm Password" required />
+          </div>
+          <button type="submit" class="register-btn">Create Account</button>
+        </form>
+
+        <p class="login-link">Already have an account? <a href="login.html">Sign in</a></p>
+      </div>
+    </section>
+  </main>
 
   <script type="module" src="js/auth.js"></script>
 </body>

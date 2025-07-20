@@ -2,19 +2,23 @@
     --white: #ffffff;
     --glass-dark: rgba(30, 30, 30, 0.65);
     --blur: blur(6px);
+
     --text-primary: var(--white);
     --text-secondary: rgba(255, 255, 255, 0.8);
     --accent-color: #a6c1ee;
     --accent-dark: #764ba2;
+
     --header-bg: var(--glass-dark);
     --form-bg: var(--glass-dark);
     --input-bg: rgba(255, 255, 255, 0.15);
     --input-border: rgba(255, 255, 255, 0.3);
     --button-bg: rgba(255, 255, 255, 0.2);
     --button-hover-bg: rgba(255, 255, 255, 0.3);
+
     --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.08);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.12);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
+
     --border-radius-md: 8px;
     --border-radius-lg: 12px;
     --border-radius-xl: 10px;
@@ -23,10 +27,12 @@
 body[data-theme="dark"] {
     --white: #e0e0e0;
     --glass-dark: rgba(0, 0, 0, 0.75);
+
     --text-primary: var(--white);
     --text-secondary: #cccccc;
     --accent-color: #6c7ff7;
     --accent-dark: #5a6fe0;
+
     --header-bg: var(--glass-dark);
     --form-bg: var(--glass-dark);
     --input-bg: rgba(0, 0, 0, 0.4);
@@ -53,8 +59,6 @@ body {
     transition: color 0.3s ease;
     min-height: 100vh;
     position: relative;
-    display: flex;
-    flex-direction: column;
 }
 
 .background-video-container {
@@ -69,8 +73,7 @@ body {
 
 .background-video {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 0; left: 0;
     width: 100%;
     height: 100%;
     background: url('https://i.pinimg.com/originals/e7/be/02/e7be02ddd579c1230e96447af8e6eb00.gif') center center / cover no-repeat;
@@ -90,7 +93,7 @@ body {
     z-index: -1;
 }
 
-.reminisce-header {
+.milestone-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -100,7 +103,7 @@ body {
     padding: 0.8rem 1rem;
     box-shadow: var(--shadow-md);
     flex-wrap: wrap;
-    position: sticky;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -110,7 +113,7 @@ body {
     transition: background 0.3s ease;
 }
 
-.reminisce-header .logo {
+.milestone-header .logo {
     display: flex;
     align-items: center;
     font-size: 1.3rem;
@@ -118,7 +121,7 @@ body {
     color: var(--white);
 }
 
-.reminisce-header .logo-img {
+.milestone-header .logo-img {
     width: 35px;
     height: 35px;
     border-radius: 50%;
@@ -127,7 +130,7 @@ body {
     box-shadow: var(--shadow-sm);
 }
 
-.reminisce-header h1 {
+.milestone-header h1 {
     font-size: 1.6rem;
     color: var(--white);
     margin: 0 auto;
@@ -135,7 +138,7 @@ body {
     flex-grow: 1;
 }
 
-.reminisce-header .back-btn {
+.milestone-header .back-btn {
     padding: 0.5rem 1rem;
     background-color: var(--button-bg);
     border-radius: var(--border-radius-md);
@@ -149,38 +152,26 @@ body {
     font-size: 0.95rem;
 }
 
-.reminisce-header .back-btn:hover {
+.milestone-header .back-btn:hover {
     background-color: var(--button-hover-bg);
     transform: translateY(-1px);
 }
 
 .main-content-wrapper {
-    padding-top: 20px;
+    padding-top: 100px;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
-    min-height: calc(100vh - 80px);
+    justify-content: center;
+    min-height: calc(100vh - 100px);
     padding-bottom: 20px;
     position: relative;
     z-index: 1;
     width: 100%;
-    max-width: 900px;
-    margin: 20px auto;
-    gap: 20px;
 }
 
-.main-content-wrapper h2 {
-    font-size: 2rem;
-    margin-bottom: 10px;
-    text-align: center;
-}
-
-#reminisceBtn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+button[onclick="signIn()"] {
     background: var(--accent-color);
     color: var(--white);
     padding: 12px 25px;
@@ -192,176 +183,189 @@ body {
     transition: all 0.3s ease;
     border: 1px solid var(--accent-color);
     margin-bottom: 30px;
-    gap: 10px;
 }
 
-#reminisceBtn:hover {
+button[onclick="signIn()"]:hover {
     background: var(--accent-dark);
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
     border-color: var(--accent-dark);
 }
 
-#reminisceBtn video#diceIcon {
-    height: 30px;
-    width: 30px;
-}
-
-#memoryDisplay {
+form#milestoneForm {
     background: var(--form-bg);
     backdrop-filter: var(--blur);
-    padding: 1.5rem;
+    padding: 2rem;
     border-radius: var(--border-radius-lg);
     box-shadow: var(--shadow-md);
     max-width: 450px;
-    width: 95%;
+    width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 1.2rem;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
     border: 1px solid var(--input-border);
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+form#milestoneForm input,
+form#milestoneForm textarea {
+    width: 100%;
+    padding: 0.9rem;
+    border: 1px solid var(--input-border);
+    border-radius: var(--border-radius-xl);
+    font-size: 1rem;
     transition: all 0.3s ease;
+    background: var(--input-bg);
+    color: var(--text-primary);
+    caret-color: var(--accent-color);
 }
 
-#memoryDisplay.hidden {
-    display: none;
+form#milestoneForm input::placeholder,
+form#milestoneForm textarea::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.7;
 }
 
-#memoryDisplay h3 {
-    font-size: 1.6rem;
-    color: var(--accent-color);
-    margin-bottom: 8px;
+form#milestoneForm input:focus,
+form#milestoneForm textarea:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px rgba(166, 193, 238, 0.15);
+}
+
+form#milestoneForm textarea {
+    min-height: 100px;
+    resize: vertical;
+    border-radius: var(--border-radius-md);
+}
+
+form#milestoneForm button[type="submit"] {
+    background: var(--accent-color);
+    color: var(--white);
+    padding: 12px 25px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: var(--border-radius-xl);
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+    border: 1px solid var(--accent-color);
+}
+
+form#milestoneForm button[type="submit"]:hover {
+    background: var(--accent-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--accent-dark);
+}
+
+p#status {
+    margin-top: 20px;
+    font-size: 0.95rem;
+    color: var(--text-primary);
     text-align: center;
 }
 
-#memoryDisplay p {
-    font-size: 1rem;
-    color: var(--text-secondary);
-    margin-bottom: 5px;
-}
-
-#memoryPhotoContainer,
-#memoryVideoContainer,
-#memoryAudioContainer {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-top: 8px;
-}
-
-#memoryPhotoContainer img,
-#memoryVideoContainer video,
-#memoryAudioContainer audio {
-    max-width: 100%;
-    height: auto;
-    max-height: 300px;
-    object-fit: contain;
-    border-radius: var(--border-radius-md);
-    box-shadow: var(--shadow-sm);
-    display: block;
-}
-
-button {
-    border: none;
-    cursor: pointer;
-    font-family: inherit;
-}
-
 @media (max-width: 768px) {
-    .reminisce-header {
+    .milestone-header {
         flex-direction: column;
         align-items: center;
         padding: 0.6rem 0.8rem;
     }
-    .reminisce-header .logo {
+    .milestone-header .logo {
         margin-bottom: 10px;
         justify-content: center;
         width: 100%;
     }
-    .reminisce-header h1 {
+    .milestone-header h1 {
         font-size: 1.4rem;
         margin: 0.5rem 0;
         width: 100%;
     }
-    .reminisce-header .back-btn {
+    .milestone-header .back-btn {
         margin-top: 10px;
         width: 100%;
         text-align: center;
     }
 
     .main-content-wrapper {
-        padding-top: 20px;
-        min-height: calc(100vh - 70px);
+        padding-top: 80px;
+        min-height: calc(100vh - 80px);
         padding-left: 0.8rem;
         padding-right: 0.8rem;
-        margin-top: 80px;
     }
 
-    #reminisceBtn {
+    button[onclick="signIn()"] {
         padding: 10px 20px;
         font-size: 1rem;
         margin-bottom: 25px;
     }
 
-    #memoryDisplay {
+    form#milestoneForm {
         padding: 1.5rem;
-        gap: 10px;
+        gap: 1rem;
         max-width: 90%;
     }
 
-    #memoryDisplay h3 {
-        font-size: 1.5rem;
+    form#milestoneForm input,
+    form#milestoneForm textarea {
+        padding: 0.8rem;
+        font-size: 0.95rem;
     }
 
-    #memoryDisplay p {
+    form#milestoneForm button[type="submit"] {
+        padding: 10px 20px;
         font-size: 1rem;
     }
 
-    #memoryPhotoContainer img,
-    #memoryVideoContainer video,
-    #memoryAudioContainer audio {
-        max-height: 250px;
+    p#status {
+        margin-top: 15px;
+        font-size: 0.9rem;
     }
 }
 
 @media (max-width: 480px) {
     .main-content-wrapper {
-        padding-top: 15px;
-        min-height: calc(100vh - 60px);
+        padding-top: 70px;
+        min-height: calc(100vh - 70px);
         padding-left: 0.5rem;
         padding-right: 0.5rem;
-        margin-top: 70px;
     }
 
-    .reminisce-header {
+    .milestone-header {
         padding: 0.5rem;
     }
-    .reminisce-header h1 {
+    .milestone-header h1 {
         font-size: 1.2rem;
     }
 
-    #reminisceBtn {
+    button[onclick="signIn()"] {
         padding: 8px 15px;
         font-size: 0.95rem;
         margin-bottom: 20px;
     }
 
-    #memoryDisplay {
+    form#milestoneForm {
         padding: 1rem;
-        gap: 8px;
-        max-width: 95%;
+        gap: 0.8rem;
+        max-width: 100%;
     }
 
-    #memoryDisplay h3 {
-        font-size: 1.3rem;
+    form#milestoneForm input,
+    form#milestoneForm textarea {
+        padding: 0.7rem;
+        font-size: 0.9rem;
     }
 
-    #memoryDisplay p {
+    form#milestoneForm button[type="submit"] {
+        padding: 8px 15px;
         font-size: 0.95rem;
     }
 
-    #memoryPhotoContainer img,
-    #memoryVideoContainer video,
-    #memoryAudioContainer audio {
-        max-height: 200px;
+    p#status {
+        margin-top: 10px;
+        font-size: 0.85rem;
     }
 }

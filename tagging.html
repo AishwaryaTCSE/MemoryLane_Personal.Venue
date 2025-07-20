@@ -1,48 +1,111 @@
-<!-- tagging.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>MemoryLane | Tagging</title>
+  <title>Tagging Memories | MemoryLane</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="css/tagging.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
-  <header class="dashboard-header">
-   <div class="logo">
-   <img src="images/memory.jpg" alt="MemoryLane Logo" class="logo-img" />
-  MemoryLane
-</div>
-    <button class="back-btn" onclick="location.href='dashboard.html'">🔙 Back to Dashboard</button>
+  <div class="background-video-container">
+    <div class="background-video"></div>
+  </div>
+  <div class="background-overlay"></div>
+  <header class="tagging-header">
+    <div class="logo">
+      <img src="images/memory.jpg" alt="MemoryLane Logo" class="logo-img" />
+      <span>MemoryLane</span>
+    </div>
+    <h1>📁 Tagging Memories</h1>
+    <a href="dashboard.html" class="dashboard-link">← Back to Dashboard</a>
   </header>
 
-  <section class="modal-content">
-    <h2>📌 Add or View Tags</h2>
-    <form id="tagForm">
-      <input type="text" id="memoryId" placeholder="Memory ID" required />
-      <input type="text" id="newTag" placeholder="Enter tag (e.g. vacation)" required />
-      <button type="submit">Add Tag</button>
-      <button type="button" id="fetchMemoryBtn">🔍 Preview Memory</button>
+  <main class="main-content-wrapper">
+    <form id="tagForm" autocomplete="off">
+      <label for="memoryId">Memory ID:</label>
+      <input type="text" id="memoryId" placeholder="Enter memory ID" required />
+
+      <div class="tag-input-section">
+        <label for="tagInput">New Tag:</label>
+        <input type="text" id="tagInput" placeholder="Enter new tag" />
+        <button type="button" id="addTag">➕ Add Tag</button>
+        <ul id="tagList"></ul>
+      </div>
+
+      <div class="form-buttons">
+        <button type="submit">✅ Save Tags</button>
+        <button type="button" id="fetchMemoryBtn">🔍 Preview Memory</button>
+      </div>
     </form>
 
-    <div id="memoryPreview" class="memory-preview-box"></div>
-    <ul id="tagList"></ul>
-  </section>
+    <section id="memoryPreview" class="preview-box" hidden></section>
+    <section id="memoryCardsContainer" class="tag-groups">
+      <h3>Memories with Tags</h3>
+      <p id="noMemoriesMessage" class="no-memory-msg">No memories to display. Start by adding tags to a memory!</p>
+    </section>
 
-  <section class="tagging-section">
-    <h2>🖼️ Memories by Tag</h2>
-    <div id="photoTagGroupsContainer" class="memory-tag-group"></div>
-    <div id="videoTagGroupsContainer" class="memory-tag-group"></div>
-
-    <div class="pagination-controls">
+    <nav class="pagination">
       <button id="prevPage">⬅️ Previous</button>
       <span id="pageNumber">Page 1</span>
       <button id="nextPage">Next ➡️</button>
-    </div>
-  </section>
+    </nav>
+  </main>
 
-  <script type="module" src="js/firebase.js"></script>
+  <div id="memoryExpandedModal" class="memory-expanded-modal" hidden>
+    <div class="memory-expanded-content">
+      <button class="close-button" onclick="closeMemoryExpandedModal()" aria-label="Close">&times;</button>
+
+      <section class="expanded-media-column">
+        <h3>Media</h3>
+        <div id="expandedPhotoContainer"></div>
+        <div id="expandedVideoContainer"></div>
+      </section>
+
+      <section class="expanded-description-column">
+        <h3>Details</h3>
+        <h4 id="expandedMemoryTitle"></h4>
+        <p><strong>Date:</strong> <span id="expandedMemoryDate"></span></p>
+        <p><strong>Location:</strong> <span id="expandedMemoryLocation"></span></p>
+        <p><strong>Description:</strong> <span id="expandedMemoryDescription"></span></p>
+        <p><strong>Tags:</strong> <span id="expandedMemoryTags"></span></p>
+
+        <div class="expanded-action-buttons">
+          <button class="edit-btn" id="editMemoryBtn">✏️ Edit</button>
+          <button class="delete-btn" id="deleteMemoryBtn">🗑️ Delete</button>
+        </div>
+      </section>
+    </div>
+
+    <form id="editMemoryForm" class="preview-box" hidden>
+      <h3>Edit Memory Details</h3>
+
+      <label for="editTitle">Title:</label>
+      <input type="text" id="editTitle" required />
+
+      <label for="editDate">Date:</label>
+      <input type="date" id="editDate" />
+
+      <label for="editLocation">Location:</label>
+      <input type="text" id="editLocation" />
+
+      <label for="editDescription">Description:</label>
+      <textarea id="editDescription" rows="4"></textarea>
+
+      <div class="tag-input-section">
+        <label for="editTagInput">Tags:</label>
+        <input type="text" id="editTagInput" placeholder="Add new tag" />
+        <button type="button" id="addEditTag">➕ Add Tag</button>
+        <ul id="editTagList"></ul>
+      </div>
+
+      <div class="form-buttons">
+        <button type="submit" id="saveEditedMemoryBtn" class="save-btn">💾 Save Changes</button>
+        <button type="button" id="cancelEditBtn" class="cancel-btn">❌ Cancel</button>
+      </div>
+    </form>
+  </div>
+
   <script type="module" src="js/tagging.js"></script>
 </body>
 </html>

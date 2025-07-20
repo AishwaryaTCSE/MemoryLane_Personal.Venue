@@ -1,92 +1,166 @@
-import { auth, database } from "./firebase.js";
-import { ref as dbRef, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import {
+    getFirestore,
+    collection,
+    query,
+    where,
+    getDocs
+} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import {
+    getAuth,
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
-// HTML Elements
+const firebaseConfig = {
+    apiKey: "AIzaSyBVCX368AI2r3qiPCM6nilR02TpgUfD9PM",
+    authDomain: "memorylane-personal.firebaseapp.com",
+    databaseURL: "https://memorylane-personal-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "memorylane-personal",
+    storageBucket: "memorylane-personal.firebasestorage.app",
+    messagingSenderId: "1086350853623",
+    appId: "1:1086350853623:web:5c7a0fc63e84981f539af2",
+    measurementId: "G-SC5KE37NFY"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth();
+
 const reminisceBtn = document.getElementById("reminisceBtn");
-const memoryCard = document.getElementById("memoryCard");
-const memoryTitle = document.getElementById("memoryTitle");
-const memoryDate = document.getElementById("memoryDate");
-const memoryDescription = document.getElementById("memoryDescription");
-const memoryLocation = document.getElementById("memoryLocation");
-const memoryImage = document.getElementById("memoryImage");
-const memoryVideo = document.getElementById("memoryVideo");
+const memoryDisplay = document.getElementById("memoryDisplay");
+const diceIcon = document.getElementById("diceIcon");
 
-reminisceBtn.addEventListener("click", () => {
-  console.log("Reminisce button clicked. Checking auth...");
-  
-  onAuthStateChanged(auth, async (user) => {
-    if (!user) {
-      alert("You must be logged in to use this feature.");
-      console.warn("No user is logged in.");
-      return;
+const titleEl = document.getElementById("memoryTitle");
+const dateEl = document.getElementById("memoryDate");
+const locationEl = document.getElementById("memoryLocation");
+const descEl = document.getElementById("memoryDescription");
+const photoContainer = document.getElementById("memoryPhotoContainer");
+const videoContainer = document.getElementById("memoryVideoContainer");
+const audioContainer = document.getElementById("memoryAudioContainer");
+
+let userMemories = [];
+let currentUser = null;
+
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        currentUser = user;
+        console.log("User logged in:", user.email, "UID:", currentUser.uid);
+        await fetchUserMemories();
+    } else {
+        currentUser = null;
+        userMemories = [];
+        console.log("No user logged in, redirecting to login.");
     }
+});
 
-    const uid = user.uid;
-    console.log("Logged-in user UID:", uid);
-
-    const userMemoriesRef = dbRef(database, `memories/${uid}`);
+async function fetchUserMemories() {
+    if (!currentUser) {
+        console.log("Cannot fetch memories: No user logged in.");
+        return;
+    }
 
     try {
-      const snapshot = await get(userMemoriesRef);
-      if (!snapshot.exists()) {
-        alert("No memories found.");
-        console.log("Snapshot does not exist for user:", uid);
-        return;
-      }
+        console.log(`Fetching memories for user: ${currentUser.uid}`);
+        const q = query(collection(db, "memories"), where("userId", "==", currentUser.uid));
+        const memoriesSnap = await getDocs(q);
+        userMemories = memoriesSnap.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }));
+        console.log("Memories fetched:", userMemories.length);
 
-      const memoriesData = snapshot.val();
-      const allMemories = [];
-
-      console.log("Fetched memory data:", memoriesData);
-
-      // Support both 1-level and 2-level nested memory structure
-      for (let outerKey in memoriesData) {
-        const value = memoriesData[outerKey];
-        if (typeof value === "object" && value !== null && !value.title) {
-          // Likely nested
-          for (let memoryId in value) {
-            allMemories.push(value[memoryId]);
-          }
-        } else {
-          // Direct structure
-          allMemories.push(value);
+        if (userMemories.length === 0) {
+            console.log("No memories found for this user.");
         }
-      }
-
-      if (allMemories.length === 0) {
-        alert("No memories available.");
-        console.warn("No memories found in the database for UID:", uid);
-        return;
-      }
-
-      const randomMemory = allMemories[Math.floor(Math.random() * allMemories.length)];
-
-      // Fill memory details
-      memoryTitle.textContent = `📝 ${randomMemory.title || "Untitled"}`;
-      memoryDate.textContent = `📅 ${randomMemory.date || "Unknown Date"}`;
-      memoryDescription.textContent = `📖 ${randomMemory.description || "No description"}`;
-      memoryLocation.textContent = `📍 ${randomMemory.location || "Unknown"}`;
-
-      // Show image or video
-      if (randomMemory.photoURL) {
-        memoryImage.src = randomMemory.photoURL;
-        memoryImage.style.display = "block";
-        memoryVideo.style.display = "none";
-      } else if (randomMemory.videoURL) {
-        memoryVideo.src = randomMemory.videoURL;
-        memoryVideo.style.display = "block";
-        memoryImage.style.display = "none";
-      } else {
-        memoryImage.style.display = "none";
-        memoryVideo.style.display = "none";
-      }
-
-      memoryCard.style.display = "block";
-
-    } catch (err) {
-      console.error("Error fetching memory:", err.message);
-      alert("⚠️ Failed to fetch memory. Please check Firebase rules, data path, or console for logs.");
+    } catch (error) {
+        console.error("Error fetching user memories:", error);
+        alert("Error loading your memories. Please check your internet connection or try again later.");
     }
-  });
+}
+
+reminisceBtn.addEventListener("click", async () => {
+    if (!currentUser) {
+        alert("Please log in to reminisce a memory.");
+        return;
+    }
+
+    if (userMemories.length === 0) {
+        alert("You don't have any memories to reminisce yet! Add some memories in your dashboard.");
+        await fetchUserMemories();
+        if (userMemories.length === 0) return;
+    }
+
+    diceIcon.style.display = 'block';
+    diceIcon.play();
+
+    memoryDisplay.classList.add("hidden");
+
+    setTimeout(() => {
+        diceIcon.pause();
+        diceIcon.currentTime = 0;
+        diceIcon.style.display = 'none';
+
+        const randomMemory = userMemories[Math.floor(Math.random() * userMemories.length)];
+        displayMemory(randomMemory);
+
+    }, 1500);
+});
+
+function displayMemory(memory) {
+    titleEl.textContent = memory.title || "Untitled Memory";
+    dateEl.textContent = memory.date || "No Date";
+    locationEl.textContent = memory.location || "No Location";
+    descEl.textContent = memory.description || "No Description";
+
+    photoContainer.innerHTML = "";
+    videoContainer.innerHTML = "";
+    audioContainer.innerHTML = "";
+
+    if (memory.photoURL) {
+        const img = document.createElement("img");
+        img.src = memory.photoURL;
+        img.alt = `Photo for ${memory.title || 'memory'}`;
+        photoContainer.appendChild(img);
+    }
+
+    if (memory.videoURL) {
+        const video = document.createElement("video");
+        video.src = memory.videoURL;
+        video.controls = true;
+        videoContainer.appendChild(video);
+    }
+
+    if (memory.audioURL) {
+        const audio = document.createElement("audio");
+        audio.src = memory.audioURL;
+        audio.controls = true;
+        audioContainer.appendChild(audio);
+    }
+
+    memoryDisplay.classList.remove("hidden");
+}
+
+function applyDarkModePreference() {
+    const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+    const currentTheme = localStorage.getItem("theme");
+
+    if (currentTheme === "dark") {
+        document.body.setAttribute("data-theme", "dark");
+    } else if (currentTheme === "light") {
+        document.body.removeAttribute("data-theme");
+    } else if (prefersDarkScheme.matches) {
+        document.body.setAttribute("data-theme", "dark");
+    }
+}
+
+applyDarkModePreference();
+
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+    if (!localStorage.getItem("theme")) {
+        if (event.matches) {
+            document.body.setAttribute("data-theme", "dark");
+        } else {
+            document.body.removeAttribute("data-theme");
+        }
+    }
 });

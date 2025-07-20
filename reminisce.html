@@ -1,32 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Reminisce Memory</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- Link to CSS -->
-  <link rel="stylesheet" href="css/reminisce.css" />
-
-  <!-- Link to JS -->
-  <script type="module" src="js/reminisce.js"></script>
+    <meta charset="UTF-8" />
+    <title>Reminisce Feature</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/reminisce.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
 <body>
-  <div class="logo">
-   <img src="images/memory.jpg" alt="MemoryLane Logo" class="logo-img" />
-  MemoryLane
-</div>
-  <button class="back-btn" onclick="location.href='dashboard.html'">🔙 Back to Dashboard</button>
-<button id="reminisceBtn" class="dice-btn">🎲</button>
+    <div class="background-video-container">
+        <div class="background-video"></div>
+    </div>
+    <div class="background-overlay"></div>
 
-  <div id="memoryCard">
-    <h3 id="memoryTitle">📝 Title</h3>
-    <p id="memoryDate">📅 Date</p>
-    <p id="memoryDescription">📖 Description</p>
-    <p id="memoryLocation">📍 Location</p>
-    <img id="memoryImage" style="display:none;" />
-    <video id="memoryVideo" controls style="display:none;"></video>
-  </div>
+    <header class="reminisce-header">
+        <div class="logo">
+            <img src="images/memory.jpg" alt="MemoryLane Logo" class="logo-img" />
+            MemoryLane
+        </div>
+        <h1>MemoryLane Reminisce</h1>
+        <button class="back-btn" onclick="location.href='dashboard.html'">🔙 Back to dashboard</button>
+    </header>
 
+    <div class="container main-content-wrapper">
+        <h2>🎲 Reminisce a Memory</h2> <button id="reminisceBtn">
+            <video id="diceIcon" src="images/dice.webm" autoplay loop muted playsinline alt="Roll Dice"></video>
+            Reminisce
+        </button>
+
+        <div id="memoryDisplay" class="memory-card hidden">
+            <h3 id="memoryTitle"></h3> <p><strong>Date:</strong> <span id="memoryDate"></span></p>
+            <p><strong>Location:</strong> <span id="memoryLocation"></span></p>
+            <p><strong>Description:</strong> <span id="memoryDescription"></span></p>
+            <div id="memoryPhotoContainer"></div>
+            <div id="memoryVideoContainer"></div>
+            <div id="memoryAudioContainer"></div>
+        </div>
+    </div>
+
+    <script type="module" src="js/reminisce.js"></script>
 </body>
 </html>

@@ -1,104 +1,439 @@
+:root {
+  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --accent-color: #667eea;
+  --text-primary: #2d3748;
+  --text-secondary: #718096;
+  --white: #ffffff;
+  --gray-100: #f7fafc;
+  --gray-200: #edf2f7;
+  --gray-300: #e2e8f0;
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
 
-body {
+* {
   margin: 0;
   padding: 0;
-  font-family: "Segoe UI", sans-serif;
-  height: 100vh;
-  background: linear-gradient(to right, #71a3c1 0%, #e4c375 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  box-sizing: border-box;
 }
 
-.glass-card {
-  background: rgba(21, 6, 6, 0.15);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border-radius: 16px;
-  border: 1px solid rgba(67, 55, 55, 0.945);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.945);
-  padding: 2rem;
-  width: 350px;
-  color: #fff;
-  text-align: center;
-}
-
-h2 {
-  margin-bottom: 1rem;
-  color: #000; /* Set to black */
-}
-
-input {
-  width: 100%;
-  padding: 0.8rem;
-  margin: 0.5rem 0;
-  border: none;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.2);
-  color: #0c0c0c;
-  outline: none;
-  font-size: 1rem;
-}
-
-input::placeholder {
-  color: #141313;
-}
-
-button {
-  width: 100%;
-  padding: 0.8rem;
-  margin-top: 1rem;
-  background: #3dddf9;
-  color: #333;
-  border: none;
-  border-radius: 12px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-button:hover {
-  background: #e4c375;
-  color: #000;
-}
-
-.switch {
-  margin-top: 1rem;
-  font-size: 0.9rem;
-  color: #000; /* Set to black */
-}
-
-.switch a {
-  color: #000; /* Make link black too */
-  text-decoration: underline;
-  font-weight: bold;
-}
 body {
-  margin: 0;
-  padding: 0;
-  font-family: "Segoe UI", sans-serif;
+  font-family: 'Segoe UI', 'Roboto', sans-serif;
   height: 100vh;
-  background: url("https://edvoro.in/themes/edugator/assets/images/bg/bg-image-10.jpg") no-repeat center center fixed;
-  background-size: cover;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  overflow: hidden;
 }
-.logo {
-  position: absolute;
+
+/* Header Logo - Top Left Corner */
+.header-logo {
+  position: fixed;
   top: 20px;
   left: 20px;
   display: flex;
   align-items: center;
-  font-size: 1.5rem;
-  font-weight: bold;
   gap: 10px;
-  color: #1f1e1e; /* Change based on background contrast */
-  z-index: 1000; /* Stay above all other elements */
+  z-index: 1000;
+  color: var(--text-primary);
 }
 
-.logo-img {
-  height: 60px;
+.header-logo img {
+  height: 50px;
   width: auto;
-  border:#0c0c0c
+  border-radius: 50%;
+  border: 2px solid var(--accent-color);
+  box-shadow: var(--shadow-md);
+}
+
+.header-logo span {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.register-container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+}
+
+/* Left Side - Branding */
+.branding-side {
+  flex: 1;
+  background: var(--primary-gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.branding-side::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.1)"/><circle cx="10" cy="60" r="0.5" fill="rgba(255,255,255,0.1)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+  opacity: 0.3;
+}
+
+.branding-content {
+  text-align: center;
+  color: var(--white);
+  z-index: 1;
+  position: relative;
+  max-width: 500px;
+  padding: 2rem;
+}
+
+.hero-image {
+  margin: 3rem 0;
+  position: relative;
+  height: 300px;
+}
+
+.memory-illustration {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.floating-memories {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.memory-card {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: var(--shadow-lg);
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.9rem;
+  animation: float 6s ease-in-out infinite;
+  transition: transform 0.3s ease;
+}
+
+.memory-card:hover {
+  transform: scale(1.1);
+}
+
+.memory-card i {
+  font-size: 1.5rem;
+  color: var(--accent-color);
+}
+
+.card-1 {
+  top: 10%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.card-2 {
+  top: 20%;
+  right: 15%;
+  animation-delay: 1s;
+}
+
+.card-3 {
+  top: 50%;
+  left: 5%;
+  animation-delay: 2s;
+}
+
+.card-4 {
+  bottom: 20%;
+  right: 10%;
+  animation-delay: 3s;
+}
+
+.card-5 {
+  bottom: 10%;
+  left: 20%;
+  animation-delay: 4s;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  25% { transform: translateY(-10px) rotate(2deg); }
+  50% { transform: translateY(-5px) rotate(-1deg); }
+  75% { transform: translateY(-15px) rotate(1deg); }
+}
+
+.brand-message h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.brand-message p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  line-height: 1.6;
+}
+
+/* Right Side - Register Form */
+.register-side {
+  flex: 1;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.register-form-container {
+  width: 100%;
+  max-width: 400px;
+  background: rgba(255,255,255,0.75);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  border-radius: 22px;
+  backdrop-filter: blur(12px);
+  border: 1.5px solid rgba(255,255,255,0.25);
+  padding: 2.5rem 2rem 2rem 2rem;
+  margin: 2rem 0;
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.form-header h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.form-header p {
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+.register-form {
+  margin-bottom: 2rem;
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.input-group i {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 1rem 1rem 1rem 3rem;
+  border: 2px solid var(--gray-200);
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: var(--white);
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.input-group input::placeholder {
+  color: var(--text-secondary);
+}
+
+.register-btn {
+  width: 100%;
+  padding: 1rem;
+  background: var(--primary-gradient);
+  color: var(--white);
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.register-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.login-link {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.login-link a {
+  color: var(--accent-color);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.login-link a:hover {
+  color: var(--primary-gradient);
+}
+
+/* Background Video/GIF */
+.background-video {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  z-index: 0;
+  background: url('https://giffiles.alphacoders.com/853/85311.gif') center center/cover no-repeat;
+  filter: blur(2px) brightness(0.7);
+  pointer-events: none;
+}
+
+/* Overlay for glassmorphism effect */
+.register-container, .contact-feedback {
+  position: relative;
+  z-index: 1;
+}
+
+/* Contact & Feedback Section */
+.contact-feedback {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  background: rgba(255,255,255,0.7);
+  box-shadow: 0 2px 12px rgba(161,140,209,0.13);
+  border-radius: 18px;
+  padding: 2rem;
+  margin: 2rem auto 1rem auto;
+  max-width: 700px;
+  font-size: 1.05rem;
+}
+
+.contact-info h3, .feedback-section h3 {
+  margin-bottom: 0.5rem;
+  color: var(--accent-color);
+}
+
+.contact-info a, .feedback-link {
+  color: var(--accent-color);
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.feedback-section {
+  max-width: 320px;
+}
+
+.feedback-link {
+  display: inline-block;
+  margin-top: 0.7rem;
+  background: var(--primary-gradient);
+  color: #fff;
+  padding: 0.5rem 1.2rem;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.feedback-link:hover {
+  background: var(--secondary-gradient);
+  transform: translateY(-2px) scale(1.04);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .register-container {
+    flex-direction: column;
+  }
+  .branding-side {
+    flex: none;
+    height: 40vh;
+  }
+  .register-side {
+    flex: 1;
+    padding: 1rem;
+  }
+  .branding-content {
+    padding: 1rem;
+  }
+  .hero-image {
+    height: 200px;
+    margin: 2rem 0;
+  }
+  .memory-card {
+    padding: 0.8rem;
+    font-size: 0.8rem;
+  }
+  .memory-card i {
+    font-size: 1.2rem;
+  }
+  .header-logo {
+    top: 15px;
+    left: 15px;
+  }
+  .header-logo img {
+    height: 40px;
+  }
+  .header-logo span {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .branding-side {
+    height: 30vh;
+  }
+  .hero-image {
+    height: 150px;
+    margin: 1rem 0;
+  }
+  .memory-card {
+    padding: 0.6rem;
+    font-size: 0.7rem;
+  }
+  .memory-card i {
+    font-size: 1rem;
+  }
+  .form-header h2 {
+    font-size: 1.5rem;
+  }
+  .header-logo {
+    top: 10px;
+    left: 10px;
+  }
+  .header-logo img {
+    height: 35px;
+  }
+  .header-logo span {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .contact-feedback {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1rem;
+    gap: 1rem;
+  }
 }

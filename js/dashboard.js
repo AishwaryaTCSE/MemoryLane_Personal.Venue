@@ -1,191 +1,159 @@
-// === Import Firebase Modular SDK ===
-import { auth, database, storage } from './firebase.js';
-import {
-  ref as dbRef,
-  set,
-  get,
-  child
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import {
-  ref as storageRef,
-  uploadBytes,
-  getDownloadURL
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
-
-import {
+  getAuth,
   signOut,
   onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+import {
+  getFirestore,
+  doc,
+  setDoc
+} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL
+} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js";
 
-// === Theme Toggle ===
-const themeBtn = document.getElementById("theme-btn");
-themeBtn?.addEventListener("click", () => {
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBVCX368AI2r3qiPCM6nilR02TpgUfD9PM",
+  authDomain: "memorylane-personal.firebaseapp.com",
+  databaseURL: "https://memorylane-personal-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "memorylane-personal",
+  storageBucket: "memorylane-personal.firebasestorage.app", 
+  messagingSenderId: "1086350853623",
+  appId: "1:1086350853623:web:5c7a0fc63e84981f539af2",
+  measurementId: "G-SC5KE37NFY"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
+
+const themeToggle = document.getElementById("themeToggle");
+themeToggle?.addEventListener("click", () => {
   const body = document.body;
-  const currentTheme = body.getAttribute("data-theme");
-  body.setAttribute("data-theme", currentTheme === "dark" ? "light" : "dark");
+  const isDark = body.getAttribute("data-theme") === "dark";
+  body.setAttribute("data-theme", isDark ? "light" : "dark");
+  themeToggle.textContent = isDark ? "🌙 Dark" : "☀️ Light";
 });
 
-// === Logout Functionality ===
-const logoutBtn = document.getElementById("logout-btn");
-logoutBtn?.addEventListener("click", async () => {
-  try {
-    await signOut(auth);
-    alert("✅ Logged out successfully!");
-    window.location.href = "login.html";
-  } catch (error) {
-    alert("❌ Logout failed: " + error.message);
-  }
+document.getElementById("logoutBtn")?.addEventListener("click", () => {
+  signOut(auth)
+    .then(() => {
+      alert("Logged out!");
+      window.location.href = "login.html";
+    })
+    .catch((error) => alert("Logout failed: " + error.message));
 });
 
-// === Track Current User ===
 let currentUser = null;
 onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    alert("⚠️ Please log in to access this page.");
-    window.location.href = "login.html";
-  } else {
+  if (user) {
     currentUser = user;
+    const memoryId = window.currentMemoryId || "";
+    document.getElementById("memoryIdDisplay").textContent =
+      `User: ${user.email}${memoryId ? " | Memory ID: " + memoryId : ""}`;
+  } else {
+    window.location.href = "login.html";
   }
 });
 
-// === Sanitize File Names ===
-function sanitizeFileName(name) {
-  return name.replace(/[^\w\-\.]/gi, "_");
+document.querySelectorAll(".feature-item").forEach((item) => {
+  item.addEventListener("click", () => {
+    const feature = item.dataset.feature;
+
+    if (window.innerWidth <= 768) {
+      document.querySelector(".sidebar")?.classList.remove('active');
+      document.getElementById("features-list")?.classList.remove('show');
+    }
+
+    const routes = {
+      "Memory Entry": openMemoryEntry,
+      "Tagging Memories": () => window.location.href = "tagging.html",
+      "Timeline & Albums": () => window.location.href = "timeline.html",
+      "Reminisce Time": () => window.location.href = "reminisce.html",
+      "Milestone Time": () => window.location.href = "calender.html"
+    };
+
+    routes[feature]?.() || console.warn(`Unhandled feature: ${feature}`);
+  });
+});
+
+function openMemoryEntry() {
+  const memoryId = `memory_${Date.now()}`;
+  window.currentMemoryId = memoryId;
+
+  if (currentUser) {
+    document.getElementById("memoryIdDisplay").textContent =
+      `User: ${currentUser.email} | Memory ID: ${memoryId}`;
+  }
+
+  document.getElementById("memoryEntryModal").style.display = "block";
 }
 
-// === Memory Form Submission ===
-const memoryForm = document.getElementById("memoryForm");
-memoryForm?.addEventListener("submit", async (e) => {
+function closeMemoryEntry() {
+  document.getElementById("memoryEntryModal").style.display = "none";
+}
+window.closeMemoryEntry = closeMemoryEntry;
+
+document.getElementById("memoryForm")?.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   if (!currentUser) {
-    alert("⚠️ User not logged in.");
+    alert("User not authenticated!");
     return;
   }
 
-  const title = document.getElementById("title").value.trim();
-  const description = document.getElementById("description").value.trim();
-  const date = document.getElementById("date").value;
-  const location = document.getElementById("location").value.trim();
-  const photoFile = document.getElementById("photo").files[0];
-  const videoFile = document.getElementById("video").files[0];
+  const getValue = (id) => document.getElementById(id).value;
+  const getFile = (id) => document.getElementById(id).files[0];
 
-  const memoryId = Date.now();
+  const title = getValue("title");
+  const description = getValue("description");
+  const date = getValue("date");
+  const location = getValue("location");
+  const photoFile = getFile("photo");
+  const videoFile = getFile("video");
+
   const userId = currentUser.uid;
-  const memoryRef = dbRef(database, `memories/${userId}/${memoryId}`);
-  const userMemoryPath = `memories/${userId}/${memoryId}`;
-  const submitBtn = document.getElementById("submit-btn");
-  if (submitBtn) submitBtn.disabled = true;
+  const memoryId = window.currentMemoryId;
+  let photoURL = "", videoURL = "";
 
   try {
-    // === Check for duplicate title ===
-    const snapshot = await get(child(dbRef(database), `memories/${userId}`));
-    let isDuplicate = false;
-    if (snapshot.exists()) {
-      snapshot.forEach((childSnap) => {
-        if (childSnap.val().title === title) {
-          isDuplicate = true;
-        }
-      });
+    if (photoFile) {
+      const photoRef = ref(storage, `memories/${userId}/${memoryId}/photo_${photoFile.name}`);
+      await uploadBytes(photoRef, photoFile);
+      photoURL = await getDownloadURL(photoRef);
     }
 
-    if (isDuplicate) {
-      alert("🚫 Duplicate memory title found. Use a different title.");
-      return;
+    if (videoFile) {
+      const videoRef = ref(storage, `memories/${userId}/${memoryId}/video_${videoFile.name}`);
+      await uploadBytes(videoRef, videoFile);
+      videoURL = await getDownloadURL(videoRef);
     }
 
-    const dataToSave = {
+    await setDoc(doc(db, "memories", memoryId), {
+      memoryId,
+      userId,
       title,
       description,
       date,
       location,
-      photoURL: "",
-      videoURL: "",
+      photoURL,
+      videoURL,
       createdAt: new Date().toISOString()
-    };
+    });
 
-    // === Upload Photo ===
-    if (photoFile) {
-      const photoRef = storageRef(storage, `${userMemoryPath}/photo_${sanitizeFileName(photoFile.name)}`);
-      await uploadBytes(photoRef, photoFile);
-      const photoURL = await getDownloadURL(photoRef);
-      dataToSave.photoURL = photoURL;
-    }
-
-    // === Upload Video ===
-    if (videoFile) {
-      const videoRef = storageRef(storage, `${userMemoryPath}/video_${sanitizeFileName(videoFile.name)}`);
-      await uploadBytes(videoRef, videoFile);
-      const videoURL = await getDownloadURL(videoRef);
-      dataToSave.videoURL = videoURL;
-    }
-
-    // === Save to Realtime Database ===
-    await set(memoryRef, dataToSave);
-
-    // === Display Memory ID ===
-    const idDisplay = document.getElementById("memoryIdDisplay");
-    if (idDisplay) {
-      idDisplay.textContent = `🆔 Memory ID: ${memoryId}`;
-    }
-
+    document.getElementById("savedMemoryId").textContent = `Memory ID: ${memoryId}`;
     alert("✅ Memory saved successfully!");
-    memoryForm.reset();
+    document.getElementById("memoryForm").reset();
+    closeMemoryEntry();
   } catch (err) {
-    console.error("❌ Error saving memory:", err);
-    alert(`❌ Error saving memory:\n${err.code || ''}\n${err.message}`);
-  } finally {
-    if (submitBtn) submitBtn.disabled = false;
+    console.error(err);
+    alert("❌ Error saving memory: " + err.message);
   }
 });
-
-// === Sidebar Feature Toggle ===
-function toggleFeatures() {
-  const list = document.getElementById("features-list");
-  if (list) {
-    list.classList.toggle("hidden");
-  }
-}
-window.toggleFeatures = toggleFeatures;
-
-// === Open Memory Entry Modal ===
-function openMemoryEntry() {
-  const modal = document.getElementById("memoryEntryModal");
-  if (modal) modal.style.display = "block";
-}
-window.openMemoryEntry = openMemoryEntry;
-
-// === Close Memory Entry Modal ===
-function closeMemoryEntry() {
-  const modal = document.getElementById("memoryEntryModal");
-  if (modal) modal.style.display = "none";
-}
-window.closeMemoryEntry = closeMemoryEntry;
-
-// === Show Tagging Modal ===
-function showTagging() {
-  const modal = document.getElementById("taggingModal");
-  if (modal) modal.style.display = "block";
-}
-window.showTagging = showTagging;
-
-// === Close Tagging Modal ===
-function closeTaggingModal() {
-  const modal = document.getElementById("taggingModal");
-  if (modal) modal.style.display = "none";
-}
-window.closeTaggingModal = closeTaggingModal;
-
-// === Load Feature Section Dynamically ===
-function loadFeature(name) {
-  const container = document.getElementById("main-content");
-  if (container) {
-    container.innerHTML = `<div class="glass-card"><h2>${name}</h2><p>Feature coming soon...</p></div>`;
-  }
-}
-window.loadFeature = loadFeature;
-
-
-
-
