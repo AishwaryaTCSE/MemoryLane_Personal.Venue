@@ -1,4 +1,6 @@
-
+# Note: Adding memory form took 2 minutes until please wait
+      * Memory Id is created when memory form is added , open the memory form below memory id is created
+      
 # 📸 MemoryLane
 
 MemoryLane is a web application that helps users preserve and relive precious memories. 
@@ -153,6 +155,5 @@ Pull requests are welcome! For major changes, please open an issue first to disc
 ## 📄 License
 This project is for educational purposes.
 Would you like me to save this as your new `readme` file, or would you prefer a different filename (like `README.md`)?
-
 
 
